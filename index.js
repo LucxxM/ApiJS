@@ -69,16 +69,16 @@ app.post('/events', (req, res) => {
     res.status(200).send(event);
 });
 
-app.put('/events/:id', (req, res) => {
+app.patch('/events/:id', (req, res) => {
     const event = events.find(event => event.id === parseInt(req.params.id));
     if (!event) {
         res.status(404).send({ message: 'Event not found' });
     }
-    event.name = req.body.name;
-    event.date = req.body.date;
-    event.time = req.body.time;
-    event.location = req.body.location;
-    event.description = req.body.description;
+    if(req.body.name) event.name = req.body.name;
+    if(req.body.date) event.date = req.body.date;
+    if(req.body.time) event.time = req.body.time;
+    if(req.body.location) event.location = req.body.location;
+    if(req.body.description) event.description = req.body.description;
     res.send(event);
 });
 
