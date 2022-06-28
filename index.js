@@ -49,6 +49,10 @@ app.get('/events/:id', (req, res) => {
     res.send(event);
 });
 
+app.post('/events', (req, res) => {
+    res.send('Event created');
+});
+
 
 app.listen(8000, () => {
     console.log('app listening on port:8000');
