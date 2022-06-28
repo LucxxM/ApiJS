@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.static('public'));
+
 const events = [
     { 
         id: 1,
@@ -26,7 +28,7 @@ const events = [
         location: 'Location 3',
         description: 'Description 3'
     }
-]
+];
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World!');
@@ -36,6 +38,10 @@ const events = [
 //     res.send(`Contact me at: <a href="mailto:">luchio83@gmail.com
 //     </a>`);    
 // });
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
 app.get('/events', (req, res) => {
     res.send(events);
@@ -50,8 +56,32 @@ app.get('/events/:id', (req, res) => {
 });
 
 app.post('/events', (req, res) => {
-    res.send('Event created');
+    const event = {
+        id: events.length + 1,
+        name: req.body.name,
+        date: req.body.date,
+        time: req.body.time,
+        location: req.body.location,
+        description: req.body.description
+        // ...req.body
+    };
+    events.push(event);
+    res.status(200).send(event);
 });
+
+app.put('/events/:id', (req, res) => {
+    const event = events.find(event => event.id === parseInt(req.params.id));
+    if (!event) {
+        res.status(404).send({ message: 'Event not found' });
+    }
+    event.name = req.body.name;
+    event.date = req.body.date;
+    event.time = req.body.time;
+    event.location = req.body.location;
+    event.description = req.body.description;
+    res.send(event);
+});
+
 
 
 app.listen(8000, () => {
